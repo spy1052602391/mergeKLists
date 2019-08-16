@@ -1,0 +1,82 @@
+class Solution {
+    public int function(int[] nums , int target , int left , int right){
+        int result = -1;
+        while(left <= right){
+            int index = (left+right)>>1;
+            if(nums[index] == target){
+                result = index;
+                break;
+            }else if(nums[index] > target){
+                right = index-1;
+            }else{
+                left = index+1;
+            }
+        }
+        return result;
+    }
+
+    public int function1(int[] nums , int target , int left , int right){
+
+        int L = -1;
+        while(L == -1){
+            int index = (left+right)>>1;
+            if(nums[index] == target){
+                if(index == 0 || nums[index-1]<target)
+                    L = index;
+                else
+                    right = index-1;
+            }else
+                left = index+1;
+        }
+        return L;
+    }
+
+    public int function2(int[] nums , int target , int left , int right){
+        int R = -1;
+        while(R == -1){
+            int index = (left+right)>>1;
+            if(nums[index] == target){
+                if(index == nums.length-1 || nums[index+1]>target)
+                    R = index;
+                else
+                    left = index+1;
+            }else
+                right = index-1;
+        }
+        return R;
+    }
+
+    public int[] searchRange(int[] nums, int target) {
+        int[] arr = new int[2];
+        arr[0] = -1;
+        arr[1] = -1;
+        if(nums.length == 0)
+            return arr;
+        int result = function(nums,target,0,nums.length-1);
+        if(result == -1){
+            return arr;
+        }else{
+            int L = 0;
+            if(result == 0 || nums[result-1] != target)
+                L = result;
+            else
+                L = function1(nums,target,0,result-1);
+            int R = 0;
+            if(result == nums.length-1 || nums[result+1] != target)
+                R = result;
+            else
+                R = function2(nums,target,result+1,nums.length-1);
+            arr[0] = L;
+            arr[1] = R;
+
+            return arr;
+        }
+
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        new Solution().searchRange(new int[]{2,2} , 2);
+    }
+}
