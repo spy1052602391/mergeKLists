@@ -1,0 +1,70 @@
+package leetCode´úÂë._51N»Êºó;
+
+import java.util.ArrayList;
+import java.util.List;
+
+class Solution {
+
+    public boolean find(char[][] chars ,int row , int col , int x , int y){
+        int tmp1 = x;
+        int tmp2 = y;
+        while(tmp1 >= 0){
+            if(chars[tmp1][tmp2] == 'Q')
+                return false;
+            tmp1--;
+        }
+        
+        tmp1 = x;
+        tmp2 = y;
+        while(tmp1 >= 0 && tmp2 >= 0){
+            if(chars[tmp1][tmp2] == 'Q')
+                return false;
+            tmp1--;
+            tmp2--;
+        }
+        tmp1 = x;
+        tmp2 = y;
+        while(tmp1 >= 0 && tmp2<col){
+            if(chars[tmp1][tmp2] == 'Q')
+                return false;
+            tmp1--;
+            tmp2++;
+        }
+        return true;
+    }
+    List<List<String>> lists = new ArrayList<>();
+    public void function(char[][] chars, int row , int col , int x , List<String> list){
+        for(int i=0; i<col; i++){
+            if(find(chars,row,col,x,i)){
+                chars[x][i] = 'Q';
+                list.add(new String(chars[x]));
+                if(x < row-1) {
+                    function(chars,row,col,x+1,list);
+                }else{
+                    List<String> list1 = new ArrayList<>(list);
+                    lists.add(list1);
+                }
+                list.remove(new String(chars[x]));
+                chars[x][i] = '.';
+            }
+        }
+    }
+
+    public List<List<String>> solveNQueens(int n) {
+        char[][] chars = new char[n][n];
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n; j++){
+                chars[i][j] = '.';
+            }
+        }
+        function(chars,n,n,0,new ArrayList<>());
+        return lists;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println(new Solution().solveNQueens(4));
+
+    }
+}
