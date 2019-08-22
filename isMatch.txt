@@ -1,0 +1,50 @@
+
+
+class Solution {
+
+    public boolean function(char[] chars1 , char[] chars2, int index1 , int index2){
+
+        if(index1 == chars1.length && index2 == chars2.length )
+            return true;
+        if(index2 == chars2.length)
+            return false;
+        if(index1 <= chars1.length && chars2[index2] == '*'){
+            return function(chars1,chars2,index1,index2+1) ||
+            function(chars1,chars2,index1+1,index2);
+        }else{
+            if(chars1.length > index1 && (chars2[index2] == '?' || chars2[index2] == chars1[index1])){
+                return function(chars1,chars2,index1+1,index2+1);
+            }else{
+                return false;
+            }
+        }
+    }
+
+    public boolean isMatch(String s, String p) {
+        int m = s.length();
+        int n = p.length();
+        boolean[][] f = new boolean[m+1][n+1];
+        f[0][0] = true;
+        for(int i=1; i<=n; i++)
+            f[0][i] = f[0][i-1] && p.charAt(i-1) == '*';
+        for(int i=1; i<=m; i++){
+            //i行 代表前i个需要匹配的字符， j列 代表前j个匹配字符，   f[i][j]代表 s的前i个字符能否被 p的前j个字符串匹配
+            for(int j=1; j<=n; j++){
+                if(s.charAt(i-1) == p.charAt(j-1) || p.charAt(j-1) == '?')
+                    //如果都匹配的话， 继承i-1和j-1就行了
+                    f[i][j] = f[i-1][j-1];
+                if(p.charAt(j-1) == '*')
+                    //如果用* 去匹配空字符串的话， 就说明s不用i++ ，p需要j++ ，  所以需要继承 f[i][j-1]
+                    //如果去匹配 字符的话， 就说明s需要i++ ， p不需要 j++，  所以继承f[i-1][j]
+                    f[i][j] = f[i-1][j] || f[i][j-1];
+            }
+        }
+        return f[m][n];
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println(new Solution().isMatch("aa","*"));
+    }
+}
