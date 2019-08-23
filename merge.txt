@@ -1,0 +1,56 @@
+
+
+import java.util.*;
+
+class Solution {
+    public int[][] merge(int[][] intervals) {
+        Arrays.sort(intervals, (Comparator<int[]>) (o1, o2) -> {
+            for(int i=0; i<o1.length; i++){
+                if(o1[i] == o2[i])
+                    continue;
+                else
+                    return o1[i]-o2[i];
+            }
+            return 0;
+        });
+        List<int[]> list = new ArrayList<>();
+        int index = 0;
+        while(index < intervals.length){
+            int start = intervals[index][0];
+            int max = intervals[index][1];
+            while(index < intervals.length-1 && (max >= intervals[index+1][0])){
+                if(intervals[index+1][1] > max)
+                    max = intervals[index+1][1];
+                index++;
+            }
+            if(start == intervals[index][0])
+                list.add(intervals[index]);
+            else{
+                int[] arr = new int[2];
+                arr[0] = start;
+                arr[1] = intervals[index][1]>max ? intervals[index][1]:max;
+                list.add(arr);
+            }
+            index++;
+        }
+        int[][] result = new int[list.size()][2];
+        int count = 0;
+        for(int[] arrs : list){
+            result[count] = arrs;
+            count++;
+        }
+        return result;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        int[][] arr = new Solution().merge(new int[][]{{5,6},{4,4},{3,3},{2,2},{5,5}});
+        for(int i=0; i<arr.length; i++){
+            for(int j=0; j<arr[0].length; j++){
+                System.out.println(arr[i][j]);
+            }
+        }
+
+    }
+}
