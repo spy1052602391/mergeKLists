@@ -1,0 +1,42 @@
+
+import java.util.ArrayList;
+import java.util.List;
+
+//递归的思路就是n位gray码是由n-1位gray码生成，举个例子简单一些：
+//比如求n=3的gray码，首先知道n=2的gray码是(00,01,11,10)
+//那么n=3的gray码其实就是对n=2的gray码首位添加0或1生成的，添加0后变成(000,001,011,010)
+//添加1后需要顺序反向就变成(110,111,101,100)
+//组合在一起就是(000,001,011,010,110,111,101,100)
+
+class Solution {
+    public List<Integer> grayCode(int n) {
+        List<Integer> list1 = new ArrayList<>();
+        if(n == 0) {
+            list1.add(0);
+            return list1;
+        }
+        int m = 1<<n;
+        if(n == 1){
+            list1.add(0);
+            list1.add(1);
+            return list1;
+        }
+        List<Integer> list = grayCode(n-1);
+        List<Integer> result = new ArrayList<>();
+        int j = 0;
+        for(int i=0; i<m; i++){
+            if(i<(m>>1))
+                result.add(list.get(j++));
+            else{
+                result.add(list.get(--j)+(int)Math.pow(2,n-1));
+            }
+        }
+        return result;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println(new Solution().grayCode(2));
+    }
+}
