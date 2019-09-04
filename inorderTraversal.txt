@@ -1,0 +1,35 @@
+package leetCode代码._94二叉树的中序遍历;
+
+
+import java.util.ArrayList;
+import java.util.List;
+
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    TreeNode(int x) { val = x; }
+}
+
+class Solution {
+    List<Integer> list = new ArrayList<>();
+
+    public void function(TreeNode root){
+        if(root == null)
+            return;
+        function(root.left);
+        list.add(root.val);
+        function(root.right);
+    }
+
+    public List<Integer> inorderTraversal(TreeNode root) {
+        function(root);
+        return list;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+    }
+}
